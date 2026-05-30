@@ -39,3 +39,11 @@ jobs:
     - name: Run mlflow project
       run: |
         mlflow run Project --env-manager=local
+
+    - name: Save mlruns to repo
+      run: |
+        git config --global user.name ${{ secret.username }}
+        git config --global user.email ${{ secrets.email }}
+        git add mlruns/
+        git commit -m "Save mlruns"
+        git push origin master
