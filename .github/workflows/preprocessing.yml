@@ -1,9 +1,9 @@
-name: AutoPrerocessing
+name: Otomatisasi Preprocessing Data
 
 on:
   push:
-  branches:
-    - main
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -14,32 +14,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout Repositori
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pandas scikit-learn
 
-    - name: Run preprocessing script
+    - name: Jalankan Script Preprocessing
       run: python preprocessing/automate_Nurtawinda.py
 
-    - name: Commit and push changes
+    - name: Commit dan Push Dataset
       run: |
-        git config --local user.email "github-actions@github.com"
-        git config --local user.name "github-actions"
-
-        git add preprocessing/credit_risk_dataset_preprocessing.csv
-
-        if ! [-n "$(git status --porcelain)"]; then
-          git commit -m "Update preprocessed dataset"
+        git config --local user.email "github-actions[bot]@://github.com"
+        git config --local user.name "github-actions[bot]"
+        
+        git add -A
+        if [ -n "$(git status --porcelain)" ]; then
+          git commit -m "Umat: Dataset siap latih diperbarui otomatis [skip ci]"
           git push
         else
-          echo "No changes to commit"
+          echo "Tidak ada perubahan data yang perlu disimpan."
         fi
