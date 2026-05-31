@@ -7,14 +7,11 @@ def pipeline_preprocessing_otomatis(file_path):
     Menerima input path file CSV dan mengembalikan DataFrame yang siap dilatih.
     """
     # 1. Load Dataset
-    print("[1/5] Membaca file data...")
     df = pd.read_csv(file_path)
-    
-    # Gunakan .copy() untuk menghindari SettingWithCopyWarning
+
     df_clean = df.copy()
     
-    # 2. Pembersihan Outlier Berdasarkan Logika Bisnis & Statistik
-    print("[2/5] Membersihkan outlier ekstrem...")
+    # 2. Pembersihan Outlier
     # Batasi usia maksimal 80 tahun
     df_clean = df_clean[df_clean['person_age'] <= 80]
     # Batasi masa kerja maksimal 60 tahun
@@ -23,7 +20,6 @@ def pipeline_preprocessing_otomatis(file_path):
     df_clean = df_clean[df_clean['cb_person_cred_hist_length'] <= 40]
     
     # 3. Penanganan Missing Values (Imputasi Median)
-    print("[3/5] Mengisi nilai kosong (NaN)...")
     median_emp = df_clean['person_emp_length'].median()
     median_rate = df_clean['loan_int_rate'].median()
     
@@ -31,19 +27,17 @@ def pipeline_preprocessing_otomatis(file_path):
     df_clean['loan_int_rate'] = df_clean['loan_int_rate'].fillna(median_rate)
     
     # 4. Categorical Encoding (One-Hot Encoding)
-    print("[4/5] Mengonversi fitur teks ke angka (Encoding)...")
     kolom_kategorikal = [
         'person_home_ownership', 
         'loan_intent', 
         'loan_grade', 
         'cb_person_default_on_file'
     ]
-    # Drop_first=True untuk menghindari jebakan multikolinearitas (dummy variable trap)
+
     df_clean = pd.get_dummies(df_clean, columns=kolom_kategorikal, drop_first=True)
     
     # 5. Feature Scaling (Standard Scaler)
-    print("[5/5] Melakukan penskalaan fitur numerik...")
-    # Pisahkan kolom target (loan_status) agar tidak ikut diskalakan
+    # Pisahkan kolom target (loan_status)
     target = 'loan_status'
     fitur_numerik = [
         'person_age', 'person_income', 'person_emp_length', 
