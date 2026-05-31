@@ -8,10 +8,16 @@ def pipeline_preprocessing_otomatis(file_path):
     """
     # 1. Load Dataset
     df = pd.read_csv(file_path)
-
-    df_clean = df.copy()
     
     # 2. Pembersihan Outlier
+    #batas IQR untuk person_income
+    Q1 = df['person_income'].quantile(0.25)
+    Q3 = df['person_income'].quantile(0.75)
+    IQR = Q3 - Q1
+    batas_bawah = Q1 - 1.5 * IQR
+    batas_atas = Q3 + 1.5 * IQR
+    df_clean = df[(df['person_income'] >= batas_bawah) & (df['person_income'] <= batas_atas)]
+
     # Batasi usia maksimal 80 tahun
     df_clean = df_clean[df_clean['person_age'] <= 80]
     # Batasi masa kerja maksimal 60 tahun
