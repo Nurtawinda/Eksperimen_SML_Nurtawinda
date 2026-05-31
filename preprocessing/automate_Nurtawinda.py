@@ -61,7 +61,7 @@ def pipeline_preprocessing_otomatis(file_path):
 if __name__ == "__main__":
     # Ganti dengan nama file dataset asli Anda
     INPUT_DATASET = "credit_risk_dataset.csv" 
-    OUTPUT_DATASET = "credit_risk_siap_training.csv"
+    OUTPUT_DATASET = "credit_risk_dataset_preprocessing.csv"
     
     try:
         # Jalankan fungsi otomatisasi
