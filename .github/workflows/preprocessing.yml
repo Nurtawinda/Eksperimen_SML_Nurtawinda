@@ -2,13 +2,12 @@ name: AutoPrerocessing
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - './credit_risk_dataset_preprocessing.csv'
-      - './automate_Nurtawinda.py'
-
+  branches:
+    - main
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   run-preprocessing:
@@ -33,12 +32,12 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
+        git config --local user.email "github-actions@github.com"
+        git config --local user.name "github-actions"
 
         git add preprocessing/credit_risk_dataset_preprocessing.csv
 
-        if ! git diff --cached --quiet; then
+        if ! [-n "$(git status --porcelain)"]; then
           git commit -m "Update preprocessed dataset"
           git push
         else
