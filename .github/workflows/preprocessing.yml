@@ -29,14 +29,14 @@ jobs:
         pip install pandas scikit-learn
 
     - name: Run preprocessing script
-      run: python automate_Nurtawinda.py
+      run: python preprocessing/automate_Nurtawinda.py
 
     - name: Commit and push changes
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@github.com'
 
-        git add credit_risk_dataset_preprocessing.csv
+        git add preprocessing/credit_risk_dataset_preprocessing.csv
 
         if ! git diff --cached --quiet; then
           git commit -m "Update preprocessed dataset"
